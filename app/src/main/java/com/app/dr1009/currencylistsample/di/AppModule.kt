@@ -1,13 +1,33 @@
 package com.app.dr1009.currencylistsample.di
 
-import android.app.Application
-import android.content.Context
+import com.app.dr1009.currencylistsample.api.CurrencyService
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
-class AppModule(private val application: Application) {
+class AppModule {
 
+    @Singleton
     @Provides
-    fun provideContext(): Context = application.applicationContext
+    fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
+        .client(okHttpClient)
+        .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
+        .build()
+
+    @Singleton
+    @Provides
+    fun provideCurrencyService(retrofit: Retrofit): CurrencyService = retrofit.create(CurrencyService::class.java)
 }
