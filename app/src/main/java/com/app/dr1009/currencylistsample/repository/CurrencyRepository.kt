@@ -14,6 +14,7 @@ class CurrencyRepository @Inject constructor(
     }
 
     suspend fun fetchCurrency() {
-        val resposne = currencyService.getCurrencies(ACCESS_KEY)
+        val response = currencyService.getCurrencies(ACCESS_KEY)
+        val currencyMap = response.quotes
     }
 }

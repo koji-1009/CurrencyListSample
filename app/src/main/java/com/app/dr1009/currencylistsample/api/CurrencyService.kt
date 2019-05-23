@@ -6,6 +6,6 @@ import retrofit2.http.Query
 
 interface CurrencyService {
 
-    @GET("https://apilayer.net/api/live")
+    @GET("live")
     suspend fun getCurrencies(@Query("access_key") accessKey: String): CurrencyResponse
 }
