@@ -7,6 +7,7 @@ import com.app.dr1009.currencylistsample.entity.SelectableSource
 import com.app.dr1009.currencylistsample.repository.CurrencyRepository
 import com.app.dr1009.currencylistsample.util.map
 import com.app.dr1009.currencylistsample.util.switchMap
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -68,10 +69,12 @@ class MainViewModel @Inject constructor(
     }
 
     private fun fetchCurrencyList(source: SelectableSource = SelectableSource.USD) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             runCatching {
                 repository.fetchCurrency(source.currencyCode)
-            }.onFailure { networkError.postValue(it) }
+            }.onFailure {
+                networkError.postValue(it)
+            }
         }
     }
 
