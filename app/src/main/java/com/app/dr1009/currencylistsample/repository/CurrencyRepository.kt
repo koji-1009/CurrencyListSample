@@ -1,5 +1,6 @@
 package com.app.dr1009.currencylistsample.repository
 
+import com.app.dr1009.currencylistsample.BuildConfig
 import com.app.dr1009.currencylistsample.api.CurrencyService
 import com.app.dr1009.currencylistsample.dao.CurrencyDao
 import com.app.dr1009.currencylistsample.entity.Currency
@@ -46,7 +47,7 @@ class CurrencyRepository @Inject constructor(
     }
 
     companion object {
-        private const val ACCESS_KEY = "test"
+        private const val ACCESS_KEY = BuildConfig.CURRENCY_API_KEY
         private const val MILLIS_30_MINUTES = 30 * 60 * 1000
     }
 }
