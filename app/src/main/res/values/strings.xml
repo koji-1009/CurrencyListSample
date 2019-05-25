@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CurrencyListSample</string>
+    <string name="action_refresh_list">Refresh List</string>
 </resources>

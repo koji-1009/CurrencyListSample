@@ -14,7 +14,7 @@ class CurrencyRepository @Inject constructor(
     private val currencyDao: CurrencyDao
 ) {
 
-    val currencyList = currencyDao.findCurrency()
+    fun currencyList(source: String) = currencyDao.findCurrency(source)
 
     suspend fun fetchCurrency(source: String) {
         val timestampList = currencyDao.findTimestamp(source)

@@ -3,7 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/action_refresh"
+        android:orderInCategory="100"
+        android:title="@string/action_refresh_list"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_oss"
+        android:orderInCategory="9900"
         android:title="@string/oss_license_title"
         app:showAsAction="never" />
 </menu>

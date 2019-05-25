@@ -22,8 +22,8 @@ interface CurrencyDao {
         insert(currencyList)
     }
 
-    @Query("SELECT * FROM currency")
-    fun findCurrency(): LiveData<List<Currency>>
+    @Query("SELECT * FROM currency WHERE source=:source")
+    fun findCurrency(source: String): LiveData<List<Currency>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(timestamp: CurrencyResponseTimestamp)

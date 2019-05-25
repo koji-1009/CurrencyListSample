@@ -8,10 +8,11 @@ import java.sql.Timestamp
 data class Currency(
     @PrimaryKey
     val pair: String,
-    val rate: Double
+    val rate: Double,
+    val source: String
 ) {
     companion object {
-        fun create(response: CurrencyResponse) = response.quotes.map { Currency(pair = it.key, rate = it.value) }
+        fun create(response: CurrencyResponse) = response.quotes.map { Currency(pair = it.key, rate = it.value, source = response.source) }
     }
 }
 

@@ -9,6 +9,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.dr1009.currencylistsample.R
+import com.app.dr1009.currencylistsample.util.consume
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -42,10 +43,8 @@ class MainActivity : DaggerAppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_oss -> {
-                startActivity(Intent(this, OssLicensesMenuActivity::class.java))
-                return true
-            }
+            R.id.action_refresh -> consume { viewModel.fetchCurrentCurrencyList() }
+            R.id.action_oss -> consume { startActivity(Intent(this, OssLicensesMenuActivity::class.java)) }
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -35,9 +35,7 @@ class MainFragment : DaggerFragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-        val adapter = CurrencyListAdapter {
-
-        }
+        val adapter = CurrencyListAdapter(viewModel::setCurrency)
         binding.recyclerView.adapter = adapter
         viewModel.currencyList.observe(this, Observer(adapter::submitList))
 
@@ -69,6 +67,7 @@ class MainFragment : DaggerFragment() {
 
             fun bindTo(currency: Currency, f: (Currency) -> Unit) {
                 binding.currency = currency
+                binding.layoutCurrency.setOnClickListener { f(currency) }
                 binding.executePendingBindings()
             }
         }
