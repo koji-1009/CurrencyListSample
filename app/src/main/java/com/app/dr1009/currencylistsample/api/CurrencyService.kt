@@ -7,5 +7,8 @@ import retrofit2.http.Query
 interface CurrencyService {
 
     @GET("live")
-    suspend fun getCurrencies(@Query("access_key") accessKey: String): CurrencyResponse
+    suspend fun getCurrencies(
+        @Query("access_key") accessKey: String,
+        @Query("source") source: String
+    ): CurrencyResponse
 }

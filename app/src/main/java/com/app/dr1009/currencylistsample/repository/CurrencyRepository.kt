@@ -17,17 +17,10 @@ class CurrencyRepository @Inject constructor(
     fun currencyList(source: String) = currencyDao.findCurrency(source)
 
     suspend fun fetchCurrency(source: String) {
-        val timestampList = currencyDao.findTimestamp(source)
-        if (timestampList.isNotEmpty()) {
-            val lastTimestamp = timestampList[0].getTimestampInstance()
-            val before30Min = Date(System.currentTimeMillis() - MILLIS_30_MINUTES)
-            if (!lastTimestamp.before(before30Min)) {
-                // refreshed no more frequently than every 30 minutes (to limit bandwidth usage)
-                return
-            }
-        }
+        val isAllow = isAllowedRefresh(source)
+        if (!isAllow) return
 
-        val response = currencyService.getCurrencies(ACCESS_KEY)
+        val response = currencyService.getCurrencies(ACCESS_KEY, source)
         if (!response.success) {
             throw IllegalStateException()
         }
@@ -36,6 +29,20 @@ class CurrencyRepository @Inject constructor(
         val currencyList = Currency.create(response)
 
         currencyDao.replaceCurrency(timestamp, currencyList)
+    }
+
+    private suspend fun isAllowedRefresh(source: String): Boolean {
+        val timestampList = currencyDao.findTimestamp(source)
+        if (timestampList.isNotEmpty()) {
+            val lastTimestamp = timestampList[0].getTimestampInstance()
+            val before30Min = Date(System.currentTimeMillis() - MILLIS_30_MINUTES)
+            if (!lastTimestamp.before(before30Min)) {
+                // refreshed no more frequently than every 30 minutes (to limit bandwidth usage)
+                return false
+            }
+        }
+
+        return true
     }
 
     companion object {

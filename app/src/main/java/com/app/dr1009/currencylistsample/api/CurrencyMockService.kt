@@ -11,7 +11,7 @@ import kotlinx.coroutines.Deferred as Deferred1
 
 class CurrencyMockService : CurrencyService {
     @ImplicitReflectionSerializer
-    override suspend fun getCurrencies(accessKey: String): CurrencyResponse {
+    override suspend fun getCurrencies(accessKey: String, source: String): CurrencyResponse {
         return getJsonData()
     }
 
