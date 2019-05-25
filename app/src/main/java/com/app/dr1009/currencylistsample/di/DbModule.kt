@@ -15,7 +15,7 @@ object DbModule {
     @Singleton
     @Provides
     fun provideAppDatabase(app: Application): AppDatabase = Room
-        .databaseBuilder(app, AppDatabase::class.java, "currency_list_db")
+        .databaseBuilder(app, AppDatabase::class.java, AppDatabase.DB_NAME)
         .build()
 
     @JvmStatic

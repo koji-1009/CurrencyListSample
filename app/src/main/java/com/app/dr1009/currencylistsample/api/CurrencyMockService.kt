@@ -18,7 +18,7 @@ class CurrencyMockService : CurrencyService {
     @ImplicitReflectionSerializer
     private suspend inline fun getJsonData(): CurrencyResponse {
         return GlobalScope.async {
-            //１秒遅延
+            // 1秒遅延
             delay(1000)
             return@async Json.parse<CurrencyResponse>(JSON_TEST)
         }.await()

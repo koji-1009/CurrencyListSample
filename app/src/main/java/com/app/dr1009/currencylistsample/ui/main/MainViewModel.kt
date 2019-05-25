@@ -5,6 +5,8 @@ import androidx.lifecycle.*
 import com.app.dr1009.currencylistsample.entity.Currency
 import com.app.dr1009.currencylistsample.entity.SelectableSource
 import com.app.dr1009.currencylistsample.repository.CurrencyRepository
+import com.app.dr1009.currencylistsample.util.map
+import com.app.dr1009.currencylistsample.util.switchMap
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,30 +15,43 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val selectableSourceList = SelectableSource.values().map { it.getCodeAndName() }
-    val spinnerSelectPosition = MutableLiveData<Int>().apply { value = 0 }
-    private val selectSource = Transformations.map(spinnerSelectPosition) { SelectableSource.values()[it] }
+    val spinnerSelectPosition = object : MutableLiveData<Int?>() {
 
-    val currencyList: LiveData<List<Currency>> = Transformations.switchMap(selectSource) {
+        init {
+            value = 0
+        }
+
+        override fun setValue(value: Int?) {
+            if (this.value != value) super.setValue(value)
+        }
+
+        override fun postValue(value: Int?) {
+            if (this.value != value) super.postValue(value)
+        }
+    }
+    private val selectSource = spinnerSelectPosition.map { SelectableSource.values()[it ?: 0] }
+
+    val currencyList: LiveData<List<Currency>> = selectSource.switchMap {
         fetchCurrencyList(it)
 
         return@switchMap repository.currencyList(it.currencyCode)
     }
-    val error = MutableLiveData<Throwable>()
+    val networkError = MutableLiveData<Throwable>()
 
-    private val selectedCurrency: MediatorLiveData<Currency> = MediatorLiveData()
-    val currencyRate: LiveData<String> = Transformations.map(selectedCurrency) {
-        "1 " + it.pair.substring(0, 3) + " = " + it.rate + " " + it.pair.substring(3)
-    }
+    private val selectedCurrency: MediatorLiveData<Currency?> = MediatorLiveData()
+    val currencyRate: LiveData<String> = selectedCurrency.map { it?.getRateStr() ?: "" }
 
     init {
         fetchCurrencyList()
 
         selectedCurrency.addSource(currencyList) {
-            if (it.isNotEmpty()) {
-                selectedCurrency.postValue(it[0])
-            } else {
-                selectedCurrency.postValue(null)
-            }
+            selectedCurrency.postValue(
+                if (it.isNotEmpty()) {
+                    it[0]
+                } else {
+                    null
+                }
+            )
         }
     }
 
@@ -56,9 +71,11 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 repository.fetchCurrency(source.currencyCode)
-            }.onFailure { error.postValue(it) }
+            }.onFailure { networkError.postValue(it) }
         }
     }
 
     private fun SelectableSource.getCodeAndName() = "$currencyCode : $currencyName"
+
+    private fun Currency.getRateStr() = "1 " + pair.substring(0, 3) + " = " + rate + " " + pair.substring(3)
 }

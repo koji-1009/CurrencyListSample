@@ -9,4 +9,8 @@ import com.app.dr1009.currencylistsample.entity.CurrencyResponseTimestamp
 @Database(entities = [Currency::class, CurrencyResponseTimestamp::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun currencyDao(): CurrencyDao
+
+    companion object {
+        const val DB_NAME = "currency_list_db"
+    }
 }

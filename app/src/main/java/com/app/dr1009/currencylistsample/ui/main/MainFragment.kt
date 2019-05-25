@@ -15,7 +15,10 @@ import com.app.dr1009.currencylistsample.R
 import com.app.dr1009.currencylistsample.databinding.ListItemCurrencyBinding
 import com.app.dr1009.currencylistsample.databinding.MainFragmentBinding
 import com.app.dr1009.currencylistsample.entity.Currency
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
+import kotlinx.io.IOException
+import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 class MainFragment : DaggerFragment() {
@@ -38,6 +41,18 @@ class MainFragment : DaggerFragment() {
         val adapter = CurrencyListAdapter(viewModel::setCurrency)
         binding.recyclerView.adapter = adapter
         viewModel.currencyList.observe(this, Observer(adapter::submitList))
+
+        viewModel.networkError.observe(this, Observer {
+            if (it == null) return@Observer
+
+            val errorMessage = getString(
+                when (it) {
+                    is IOException, is TimeoutException -> R.string.error_network
+                    else -> R.string.error_cmn
+                }
+            )
+            Snackbar.make(binding.root, errorMessage, Snackbar.LENGTH_LONG).show()
+        })
 
         return binding.root
     }

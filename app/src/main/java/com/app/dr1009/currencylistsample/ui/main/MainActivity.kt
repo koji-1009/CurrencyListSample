@@ -2,11 +2,9 @@ package com.app.dr1009.currencylistsample.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.dr1009.currencylistsample.R
 import com.app.dr1009.currencylistsample.util.consume
@@ -30,10 +28,6 @@ class MainActivity : DaggerAppCompatActivity() {
                 .replace(R.id.container, MainFragment.newInstance())
                 .commitNow()
         }
-
-        viewModel.currencyList.observe(this, Observer {
-            Log.d("DEMO", it?.toString())
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

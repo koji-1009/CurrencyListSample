@@ -26,7 +26,7 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://apilayer.net/api")
+        .baseUrl("https://apilayer.net/api/")
         .client(okHttpClient)
         .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
         .build()

@@ -17,7 +17,7 @@
         tools:context=".ui.main.MainFragment">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/text_currency_rate"
             style="@style/TextAppearance.AppCompat.Large"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/text_currency_rate" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -52,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinner_source"
-            app:spanCount="4"
+            app:spanCount="@integer/currency_grid_span"
             tools:listitem="@layout/list_item_currency" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

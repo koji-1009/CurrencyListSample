@@ -12,7 +12,8 @@ data class Currency(
     val source: String
 ) {
     companion object {
-        fun create(response: CurrencyResponse) = response.quotes.map { Currency(pair = it.key, rate = it.value, source = response.source) }
+        fun create(response: CurrencyResponse) =
+            response.quotes.map { Currency(pair = it.key, rate = it.value, source = response.source) }
     }
 }
 
