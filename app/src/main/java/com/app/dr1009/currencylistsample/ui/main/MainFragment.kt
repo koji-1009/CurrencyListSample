@@ -6,9 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.app.dr1009.currencylistsample.R
+import com.app.dr1009.currencylistsample.databinding.ListItemCurrencyBinding
 import com.app.dr1009.currencylistsample.databinding.MainFragmentBinding
+import com.app.dr1009.currencylistsample.entity.Currency
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -29,6 +35,42 @@ class MainFragment : DaggerFragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        val adapter = CurrencyListAdapter {
+
+        }
+        binding.recyclerView.adapter = adapter
+        viewModel.currencyList.observe(this, Observer(adapter::submitList))
+
         return binding.root
+    }
+
+    internal class CurrencyListAdapter(
+        private val f: (Currency) -> Unit
+    ) : ListAdapter<Currency, CurrencyListAdapter.CurrencyViewHolder>(
+        object : DiffUtil.ItemCallback<Currency>() {
+            override fun areItemsTheSame(oldItem: Currency, newItem: Currency): Boolean = oldItem.pair == newItem.pair
+            override fun areContentsTheSame(oldItem: Currency, newItem: Currency): Boolean = oldItem == newItem
+        }
+    ) {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
+            return CurrencyViewHolder(
+                LayoutInflater
+                    .from(parent.context)
+                    .inflate(R.layout.list_item_currency, parent, false)
+            )
+        }
+
+        override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
+            holder.bindTo(getItem(position), f)
+        }
+
+        internal class CurrencyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            private val binding = ListItemCurrencyBinding.bind(view)
+
+            fun bindTo(currency: Currency, f: (Currency) -> Unit) {
+                binding.currency = currency
+                binding.executePendingBindings()
+            }
+        }
     }
 }
