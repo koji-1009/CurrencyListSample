@@ -14,6 +14,8 @@ class MainViewModel @Inject constructor(
        fetchCurrencyList()
    }
 
+   val currencyList = repository.currencyList
+
    fun fetchCurrencyList() {
       viewModelScope.launch {
          repository.fetchCurrency()
