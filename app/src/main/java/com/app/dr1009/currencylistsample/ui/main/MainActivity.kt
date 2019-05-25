@@ -1,13 +1,18 @@
 package com.app.dr1009.currencylistsample.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.dr1009.currencylistsample.R
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
+
 
 class MainActivity : DaggerAppCompatActivity() {
 
@@ -30,4 +35,18 @@ class MainActivity : DaggerAppCompatActivity() {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.action_oss -> {
+                startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
