@@ -2,6 +2,7 @@ package com.app.dr1009.currencylistsample.di
 
 import com.app.dr1009.currencylistsample.api.CurrencyMockService
 import com.app.dr1009.currencylistsample.api.CurrencyService
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -28,6 +29,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl("https://apilayer.net/api/")
         .client(okHttpClient)
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
         .build()
 
