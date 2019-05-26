@@ -11,14 +11,14 @@ interface CurrencyDao {
     @Insert
     suspend fun insert(currencyList: List<Currency>)
 
-    @Query("DELETE FROM currency")
-    suspend fun deleteCurrency()
+    @Query("DELETE FROM currency WHERE source=:source")
+    suspend fun deleteCurrency(source: String)
 
     @Transaction
     suspend fun replaceCurrency(timestamp: CurrencyResponseTimestamp, currencyList: List<Currency>) {
         insert(timestamp)
 
-        deleteCurrency()
+        deleteCurrency(timestamp.source)
         insert(currencyList)
     }
 
