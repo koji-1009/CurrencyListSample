@@ -8,8 +8,8 @@ import retrofit2.http.Query
 interface CurrencyService {
 
     @GET("live")
-    fun getCurrencies(
+    suspend fun getCurrencies(
         @Query("access_key") accessKey: String,
         @Query("source") source: String
-    ): Deferred<CurrencyResponse>
+    ): CurrencyResponse
 }

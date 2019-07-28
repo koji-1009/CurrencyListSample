@@ -1,12 +1,11 @@
 package com.app.dr1009.currencylistsample.di
 
 import com.app.dr1009.currencylistsample.api.CurrencyService
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -28,8 +27,7 @@ object NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl("https://apilayer.net/api/")
         .client(okHttpClient)
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .addConverterFactory(Json.asConverterFactory(MediaType.get("application/json")))
+        .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
 
     @JvmStatic

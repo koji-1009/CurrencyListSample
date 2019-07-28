@@ -23,7 +23,7 @@ class CurrencyRepository @Inject constructor(
         val isAllow = isAllowedRefresh(source)
         if (!isAllow) return
 
-        val response = currencyService.getCurrencies(ACCESS_KEY, source).await()
+        val response = currencyService.getCurrencies(ACCESS_KEY, source)
         if (!response.success) {
             throw IllegalStateException()
         }

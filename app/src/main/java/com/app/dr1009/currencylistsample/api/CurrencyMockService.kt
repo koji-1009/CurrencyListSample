@@ -1,9 +1,6 @@
 package com.app.dr1009.currencylistsample.api
 
 import com.app.dr1009.currencylistsample.entity.CurrencyResponse
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
@@ -11,22 +8,20 @@ import kotlinx.serialization.parse
 
 class CurrencyMockService : CurrencyService {
     @ImplicitReflectionSerializer
-    override fun getCurrencies(accessKey: String, source: String): Deferred<CurrencyResponse> {
+    override suspend fun getCurrencies(accessKey: String, source: String): CurrencyResponse {
         return getJsonData()
     }
 
     @ImplicitReflectionSerializer
-    private fun getJsonData(): Deferred<CurrencyResponse> {
-        return GlobalScope.async {
-            // 1秒遅延
-            delay(1000)
-            return@async Json.parse<CurrencyResponse>(JSON_TEST)
-        }
+    private suspend fun getJsonData(): CurrencyResponse {
+        // 1秒遅延
+        delay(1000)
+        return Json.parse(JSON_TEST)
     }
 
     companion object {
         private const val JSON_TEST =
-"""{
+            """{
     "success": true,
     "terms": "https://currencylayer.com/terms",
     "privacy": "https://currencylayer.com/privacy",
