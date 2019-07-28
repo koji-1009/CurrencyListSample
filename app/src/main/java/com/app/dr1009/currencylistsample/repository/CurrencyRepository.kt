@@ -5,6 +5,8 @@ import com.app.dr1009.currencylistsample.api.CurrencyService
 import com.app.dr1009.currencylistsample.dao.CurrencyDao
 import com.app.dr1009.currencylistsample.entity.Currency
 import com.app.dr1009.currencylistsample.entity.CurrencyResponseTimestamp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -29,7 +31,9 @@ class CurrencyRepository @Inject constructor(
         val timestamp = CurrencyResponseTimestamp.create(response)
         val currencyList = Currency.create(response)
 
-        currencyDao.replaceCurrency(timestamp, currencyList)
+        withContext(Dispatchers.IO) {
+            currencyDao.replaceCurrency(timestamp, currencyList)
+        }
     }
 
     private suspend fun isAllowedRefresh(source: String): Boolean {
