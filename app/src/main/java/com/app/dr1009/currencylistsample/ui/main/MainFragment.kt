@@ -23,10 +23,6 @@ import javax.inject.Inject
 
 class MainFragment : DaggerFragment() {
 
-    companion object {
-        fun newInstance() = MainFragment()
-    }
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
