@@ -1,6 +1,7 @@
 package com.app.dr1009.currencylistsample.di
 
 import android.app.Application
+import android.content.Context
 import com.app.dr1009.currencylistsample.App
 import dagger.BindsInstance
 import dagger.Component
@@ -19,17 +20,10 @@ import javax.inject.Singleton
     ]
 )
 interface AppComponent : AndroidInjector<App> {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        fun application(application: Application): Builder
-
-        fun build(): AppComponent
+    @Component.Factory
+    interface Factory {
+        fun create(@BindsInstance context: Context): AppComponent
     }
-
-    override fun inject(instance: App)
 }
 
-fun Application.createAppComponent() = DaggerAppComponent.builder()
-    .application(this)
-    .build()
+fun Application.createAppComponent() = DaggerAppComponent.factory().create(this)
